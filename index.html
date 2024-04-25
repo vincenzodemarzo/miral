@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="it" data-bs-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow" />
+    <meta name="googlebot" content="noindex">
+    <title>Nuova Fattura</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <script src="https://unpkg.com/jspdf@latest/dist/jspdf.umd.min.js"></script>
+</head>
+<body>
+    
+
+    <div class="container-fluid p-5">
+        <h1 class="text-center mb-5">Nuova Fattura</h1>
+
+        <div>
+            <form class="row g-3 fs-3" id="fatturaForm">
+                <h2 class="m-3 text-danger-emphasis"><svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" fill="currentColor" class="bi bi-person-vcard-fill" viewBox="0 0 16 16">
+                    <path d="M0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2zm9 1.5a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 0-1h-4a.5.5 0 0 0-.5.5M9 8a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 0-1h-4A.5.5 0 0 0 9 8m1 2.5a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 0-1h-3a.5.5 0 0 0-.5.5m-1 2C9 10.567 7.21 9 5 9c-2.086 0-3.8 1.398-3.984 3.181A1 1 0 0 0 2 13h6.96q.04-.245.04-.5M7 6a2 2 0 1 0-4 0 2 2 0 0 0 4 0"/>
+                  </svg> Informazioni Paziente</h2>
+                <hr>
+                <div class="col-md-6">
+                  <label for="cognome" class="form-label text-info-emphasis">Cognome</label>
+                  <input type="text" class="form-control shadow" id="cognome" placeholder="Digita il Cognome del Paziente" maxlength="43" required>
+                </div>
+                <div class="col-md-6">
+                  <label for="nome" class="form-label text-info-emphasis">Nome</label>
+                  <input type="text" class="form-control shadow" id="nome" placeholder="Digita il Nome del Paziente" maxlength="43" required>
+                </div>
+                <div class="col-12">
+                  <label for="indirizzo" class="form-label text-info-emphasis">Indirizzo</label>
+                  <input type="text" class="form-control shadow" id="indirizzo" placeholder="Digita l'Indirizzo del Paziente" maxlength="43" required>
+                </div>
+                <div class="col-12 mb-5">
+                  <label for="codicefiscale" class="form-label text-info-emphasis">Codice Fiscale</label>
+                  <input type="text" class="form-control shadow" id="codicefiscale" placeholder="Digita il Codice Fiscale del Paziente" minlength="16" maxlength="16" required>
+                  <div id="codicefiscale-feedback" class="invalid-feedback" style="display: none; font-size: 16px;">
+                    Il Codice Fiscale deve avere 16 caratteri.
+                  </div>
+                </div>
+
+                <hr class="mb-3">
+
+                <h2 class="mt-5 mb-3 mx-3 text-danger-emphasis"><svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" fill="currentColor" class="bi bi-file-earmark-text-fill" viewBox="0 0 16 16">
+                    <path d="M9.293 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V4.707A1 1 0 0 0 13.707 4L10 .293A1 1 0 0 0 9.293 0M9.5 3.5v-2l3 3h-2a1 1 0 0 1-1-1M4.5 9a.5.5 0 0 1 0-1h7a.5.5 0 0 1 0 1zM4 10.5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5m.5 2.5a.5.5 0 0 1 0-1h4a.5.5 0 0 1 0 1z"/>
+                  </svg> Dati Fattura</h2>
+                <hr>
+
+                <div class="col-md-2">
+                    <label for="numero" class="form-label text-info-emphasis">N. Fattura</label>
+                    <input type="number" class="form-control shadow" id="numero" placeholder="Controlla l'ultima" required>
+                  </div>
+
+                <div class="col-md-6">
+                  <label for="data" class="form-label text-info-emphasis">Data Fattura</label>
+                  <input type="date" class="form-control shadow" id="data" required>
+                </div>
+
+                <div class="col-md-4">
+                    <label for="totale" class="form-label text-info-emphasis">Totale</label>
+                    <input type="number" class="form-control shadow" id="totale" placeholder="Digita il prezzo in € senza decimali" required>
+                  </div>
+            </form>
+
+                <hr class="mt-5">
+                
+                <div class="col-12 m-5">
+                  <button id="crea" class="btn btn-lg btn-success px-5 py-2 fs-3 shadow" onclick="generaFattura"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-file-earmark-arrow-down-fill" viewBox="0 0 16 16">
+                    <path d="M9.293 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V4.707A1 1 0 0 0 13.707 4L10 .293A1 1 0 0 0 9.293 0M9.5 3.5v-2l3 3h-2a1 1 0 0 1-1-1m-1 4v3.793l1.146-1.147a.5.5 0 0 1 .708.708l-2 2a.5.5 0 0 1-.708 0l-2-2a.5.5 0 0 1 .708-.708L7.5 11.293V7.5a.5.5 0 0 1 1 0"/>
+                  </svg> Crea Fattura</button>
+                </div>
+              
+        </div>
+    </div>
+
+    <script>
+      //Codice Fiscale Tutto Maiuscolo
+      document.getElementById("codicefiscale").addEventListener("input", function(event) {
+        var input = event.target;
+        var value = input.value;
+        var newValue = value.toUpperCase();
+        input.value = newValue;
+      });
+
+      //Uppercase per tutte le parole negli altri campi
+      document.getElementById("cognome").addEventListener("input", function(event) {
+        var input = event.target;
+        var value = input.value;
+        var newValue = value.replace(/\b\w/g, function(char) {
+          return char.toUpperCase();
+        });
+        input.value = newValue;
+      });
+
+      document.getElementById("nome").addEventListener("input", function(event) {
+        var input = event.target;
+        var value = input.value;
+        var newValue = value.replace(/\b\w/g, function(char) {
+          return char.toUpperCase();
+        });
+        input.value = newValue;
+      });
+
+      document.getElementById("indirizzo").addEventListener("input", function(event) {
+        var input = event.target;
+        var value = input.value;
+        var newValue = value.replace(/\b\w/g, function(char) {
+          return char.toUpperCase();
+        });
+        input.value = newValue;
+      });
+
+      document.getElementById("codicefiscale").addEventListener("blur", function(event) {
+        var input = event.target;
+        var value = input.value.trim(); // Rimuove eventuali spazi all'inizio e alla fine
+
+        if (value.length !== 16) {
+          input.classList.add("is-invalid"); // Aggiunge la classe per evidenziare in rosso
+          document.getElementById("codicefiscale-feedback").style.display = "block"; // Mostra il messaggio di feedback
+        } else {
+          input.classList.remove("is-invalid"); // Rimuove la classe se il campo è corretto
+          document.getElementById("codicefiscale-feedback").style.display = "none"; // Nasconde il messaggio di feedback
+        }
+      });
+      </script>
+
+    <script>
+        window.jsPDF = window.jspdf.jsPDF;
+        document.getElementById('crea').addEventListener('click', function () {
+            event.preventDefault();
+            generaFattura();
+        });
+    
+        function generaFattura() {
+            // Dati del professionista
+            var professionista = "Dr. Vincenzo De Marzo, Cardiologo\nVia Napoli, 6 - Scala A\n71122, Foggia (FG)\nP. Iva: 04202200715";
+    
+            // Dati del paziente
+            var cognome = document.getElementById('cognome').value;
+            var nome = document.getElementById('nome').value;
+            var indirizzo = document.getElementById('indirizzo').value;
+            var codicefiscale = document.getElementById('codicefiscale').value;
+    
+            // Altri dati della fattura
+            var numeroFattura = document.getElementById('numero').value;
+            var totaleFattura = document.getElementById('totale').value;
+
+            //Lavorazione Data
+            var dataFattura = document.getElementById('data').value;
+            // Dividi la data in parti (anno, mese, giorno) utilizzando la funzione split()
+            var partiData = dataFattura.split('-');
+            // Formatta la data nel formato desiderato (gg-mm-aaaa)
+            var dataFormattata = partiData[2] + '-' + partiData[1] + '-' + partiData[0];
+            
+    
+            // Creazione del documento PDF
+            var doc = new jsPDF({
+                orientation: 'portrait',
+                unit: 'cm',
+                format: 'a4',
+                marginLeft: 2,
+                marginRight: 2,
+                marginTop: 2,
+                marginBottom: 2
+            });
+    
+            // Aggiunta dei dati del professionista
+            doc.setFontSize(12);
+            doc.setFont("Helvetica", "italic");
+            doc.text(professionista, 2, 2);
+    
+            // Aggiunta della linea di separazione
+            doc.setLineWidth(0.05);
+            doc.line(2, 4, 19, 4);
+    
+            // Aggiunta dei dati del paziente
+            var paziente = cognome + ' ' + nome + '\n' + indirizzo + '\n' + codicefiscale;
+            doc.text(paziente, 11, 5.5);
+    
+            // Aggiunta della riga con numero e data fattura
+            var riga1 = "Ricevuta n. " + numeroFattura + " del " + dataFormattata;
+            doc.setFont("Helvetica", "normal");
+            doc.text(riga1, 2, 8);
+    
+            // Aggiunta dell'oggetto della fattura
+            var riga2 = "Oggetto: Visita specialistica cardiologica";
+            doc.setFont("Helvetica", "bold");
+            doc.text(riga2, 2, 9);
+
+            // Aggiunta del totale da pagare
+            var riga4 = "Totale da Pagare: " + totaleFattura + ",00 €";
+            doc.setFont("Helvetica", "bold");
+            doc.text(riga4, 2, 12);
+    
+            // Aggiunta delle note finali
+            var riga5 = "Operazione esente da IVA ex art. 10 DPR 633/1972 n.18\nImposta di bollo assolta sull’originale";
+            doc.setFont("Helvetica", "italic");
+            doc.text(riga5, 2, 15);
+
+            //Aggiunta zona firma
+            var firmaText ="Firma"
+            doc.setFont("Helvetica", "normal")
+            doc.text(firmaText, 13.5, 20.5)
+            doc.line(10.5, 22, 17.5, 22);
+    
+            // Aggiunta della linea finale
+            doc.line(2, 26.7, 19, 26.7);
+    
+            // Salvataggio e download del documento PDF
+            var namingConv = "Fattura n. " + numeroFattura + "_" + cognome + " " + nome
+            doc.save(namingConv +".pdf");
+        }
+    </script>
+    
+</body>
+</html>
